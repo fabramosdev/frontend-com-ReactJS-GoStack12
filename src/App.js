@@ -25,15 +25,32 @@ function App() {
         setProjects([...projects, project])
     }
 
+    async function handleRemoveProject(data) {
+        const projectId = data
+        await api.delete(`projects/${projectId}`)
+        api.get('projects').then(response => {
+            setProjects(response.data)
+        })
+        
+    }
+
     return (
         <>
+            <div className="container">
             <Header title="Projects"/> 
-            <ul>
+            <ul className="list-group">
                 {projects.map(project => (
-                    <li key={project.id}>{project.title}</li>
+                    <li className=" list-group-item list-group-item-primary" key={project.id}>
+                        <span>{project.title}</span> 
+                        <span><button className="btn btn-danger mx-5" type="button" onClick={handleRemoveProject.bind(this,project.id)}>Delete</button></span>
+                    </li>
                 ))}
             </ul> 
-            <button type="button" onClick={handleAddProject}>Add Project</button>        
+            <hr/>
+            <button className="btn btn-outline-primary" type="button" onClick={handleAddProject}>Add Project</button> 
+            </div>
+            
+                   
         </>
     )
 }
